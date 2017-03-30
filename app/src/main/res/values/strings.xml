@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Showing Now</string>
+    <string name="sort_by_popularity">Sort By : Most Popular</string>
+    <string name="sort_by_rating">Sort By : Highest Rated</string>
+    <string name="detail_page">Movie Detail</string>
+    <string name="error_message">Request Failed... Please Retry Again</string>
+    <string name="internet_fail">Internet Problem...Please Connect the Internet</string>
+    <string name="HIGHEST_RATED">vote_average.desc</string>
+    <string name="MOST_POPULAR">popularity.desc</string>
+</resources>
