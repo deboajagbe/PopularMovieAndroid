@@ -64,6 +64,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         if(posterPath != null) {
             String posterUrl = "http://image.tmdb.org/t/p/w500/" + posterPath;
             Picasso.with(mContext).load(posterUrl)
+                    .placeholder(R.drawable.empty)
+                    .error(R.drawable.empty)
                     .into(holder.movies_posters);
         } else {
 

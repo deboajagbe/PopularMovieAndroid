@@ -1,30 +1,38 @@
 package com.unicornheight.popularmovieandroid;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+
 public class DetailPage extends AppCompatActivity {
 
-    String Title, Poster, ReleaseDate, Votes, Overview;
+    @BindView(R.id.title)
+    TextView mTitle;
+    @BindView(R.id.posterDetail)
+    ImageView mPoster;
+    @BindView(R.id.overviewText)
+    TextView mOverview;
+    @BindView(R.id.releaseDate)
+    TextView mReleaseDate;
+    @BindView(R.id.votes)
+    TextView mVotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_page);
+        ButterKnife.bind(this);
 
         ActionBar actionBar = this.getSupportActionBar();
-
-        TextView titleView = (TextView) findViewById(R.id.title);
-        TextView dateView = (TextView) findViewById(R.id.releaseDate);
-        TextView voteView = (TextView) findViewById(R.id.votes);
-        ImageView posterView = (ImageView) findViewById(R.id.posterDetail);
-        TextView overViewTextView = (TextView) findViewById(R.id.overviewText);
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -37,24 +45,19 @@ public class DetailPage extends AppCompatActivity {
 
                 String[] movies_parts = movies.split("###");
 
-                Title = movies_parts[0];
-                Poster = movies_parts[1];
-                Overview = movies_parts[2];
-                ReleaseDate = movies_parts[3];
-                Votes = movies_parts[4];
+                mTitle.setText(movies_parts[0].toString());
+                mOverview.setText(movies_parts[2]);
+                mReleaseDate.setText(movies_parts[3]);
+                mVotes.setText(movies_parts[4]);
 
-                if (Poster.equals("null") || Poster.equals(null) || Poster.equals("")) {
-                    posterView.setImageResource(R.drawable.empty);
+                if (movies_parts[1].equals("null") || movies_parts[1].equals(null) || movies_parts[1].equals("")) {
+                    mPoster.setImageResource(R.drawable.empty);
                 } else {
                     Picasso.with(this)
-                            .load("http://image.tmdb.org/t/p/w500/" + Poster)
-                            .into(posterView);
+                            .load("http://image.tmdb.org/t/p/w500/" + movies_parts[1])
+                            .into(mPoster);
                 }
 
-                titleView.setText(Title);
-                dateView.setText(ReleaseDate);
-                voteView.setText(Votes);
-                overViewTextView.setText(Overview);
             }
         }
     }
