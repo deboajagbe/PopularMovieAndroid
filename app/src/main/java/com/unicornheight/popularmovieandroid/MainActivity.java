@@ -2,6 +2,7 @@ package com.unicornheight.popularmovieandroid;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,14 +15,18 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
 import java.net.URL;
-
 
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     static RecyclerView mRecycler;
     public static ProgressBar progressBar;
     public static MovieAdapter movieAdapter;
+    static final String API_PARAM = "api_key";
+    static final String TOKEN_API_KEY = BuildConfig.TOKEN_API_KEY;
+    static String POPULAR_MOVIES = "http://api.themoviedb.org/3/movie/popular?";
+    static String MOVIES_HIGHEST_RATED = "http://api.themoviedb.org/3/movie/top_rated?";
     static TextView mError;
 
     @Override
@@ -53,12 +58,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     //Default Load Most_Popular
     private void loadMovies(){
-        URL SearchUrl = NetworkUtils.buildMovieUrl(NetworkUtils.MOST_POPULAR);
+        Uri builtUri = Uri.parse(POPULAR_MOVIES).buildUpon()
+                .appendQueryParameter(API_PARAM, TOKEN_API_KEY)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         if(NetworkUtils.isNetworkAvailable(MainActivity.this)){
             showError();
             mError.setText(getString(R.string.internet_fail));
         } else {
-            new MovieNetwork.GetMovies().execute(SearchUrl);
+            new MovieNetwork.GetMovies().execute(url);
         }
 
     }
@@ -76,12 +89,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         switch (id){
             //Load Highest rated on click
             case R.id.sort_by_highest_rated_action:
-                URL SearchUrl = NetworkUtils.buildMovieUrl(NetworkUtils.HIGHEST_RATED);
+                Uri builtUri = Uri.parse(MOVIES_HIGHEST_RATED).buildUpon()
+                        .appendQueryParameter(API_PARAM, TOKEN_API_KEY)
+                        .build();
+                URL url = null;
+                try {
+                    url = new URL(builtUri.toString());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
                 if(NetworkUtils.isNetworkAvailable(MainActivity.this)){
                     showError();
                     mError.setText(getString(R.string.internet_fail));
                 } else {
-                    new MovieNetwork.GetMovies().execute(SearchUrl);
+                    new MovieNetwork.GetMovies().execute(url);
                 }
                 break;
             case R.id.sort_by_popular_action:
